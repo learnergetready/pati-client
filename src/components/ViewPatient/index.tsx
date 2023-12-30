@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import patientService from "../services/patients";
+import patientService from "../../services/patients";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Diagnosis, Entry, Gender, Patient } from "../types";
+import { Diagnosis, Gender, Patient } from "../../types";
 import { Female, Male } from "@mui/icons-material";
-import Other from "../../assets/other_gender_public_domain.svg?react";
-import { assertNever } from "../utils";
+import Other from "../../../assets/other_gender_public_domain.svg?react";
+import { assertNever } from "../../utils";
+import Entries from "./Entries";
 
 const genderIcon = (gender: Gender) => {
   switch (gender) {
@@ -18,31 +19,6 @@ const genderIcon = (gender: Gender) => {
     default:
       return assertNever(gender);
   }
-};
-
-const Entries = ({entries, diagnosisCodes}: {entries: Entry[], diagnosisCodes: Diagnosis[]}) => {
-  const diagnosisNamefrom = (code: Diagnosis["code"]) => {
-    const theDiagnosis = diagnosisCodes.find(d => d.code === code);
-    if (theDiagnosis) {
-      return theDiagnosis.name;
-    }
-    return "This diagnosis code was not recognized.";
-  };
-  return (
-    <Box>
-    <Typography variant="h6" marginY={3}>Entries</Typography>
-    {entries.map(entry => {
-      return (
-        <Box key={entry.id}>
-        <Typography variant="body1">{entry.date} <i>{entry.description}</i></Typography>
-        <ul>
-          {entry.diagnosisCodes && entry.diagnosisCodes.map(c => <li key={entry.id+c}>{c} {diagnosisNamefrom(c)}</li>)}
-        </ul>
-        </Box>
-      );
-    })}
-    </Box>
-  );
 };
 
 const ViewPatient = ({diagnosisCodes}: {diagnosisCodes: Diagnosis[]}) => {
