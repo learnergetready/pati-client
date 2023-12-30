@@ -2,6 +2,7 @@ import { Diagnosis, Entry, HealthCheckEntry, HealthCheckRating, HospitalEntry as
 import { Box, Typography } from "@mui/material";
 import { assertNever } from "../../utils";
 import { Favorite, HeartBroken, LocalHospital, MedicalServices, MonitorHeart, Work } from "@mui/icons-material";
+import { descendingByDate } from "../../utils";
 
 interface HealthCheckProps {
   entry: HealthCheckEntry;
@@ -77,6 +78,7 @@ const OccupationalEntry = ({entry, diagnosisNameFrom}: OccupationalProps) => {
     <ul>
       {entry.diagnosisCodes && entry.diagnosisCodes.map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
     </ul>
+    {entry.sickLeave && <Typography variant="body1" marginY={3}>Sick leave: {entry.sickLeave.startDate} to {entry.sickLeave.endDate}</Typography>}
     <Typography variant="body1">diagnosis by {entry.specialist}</Typography>
     </Box>
   );
@@ -94,8 +96,8 @@ const Entries = ({entries, diagnosisCodes}: {entries: Entry[], diagnosisCodes: D
 
     return (
       <Box>
-      <Typography variant="h6" marginY={3}>Entries</Typography>
-      {entries.map(entry => {
+      <Typography variant="h5" marginY={3}>Entries</Typography>
+      {entries.sort(descendingByDate).map(entry => {
         switch (entry.type) {
           case "HealthCheck":
             return <HealthcheckEntry key={entry.id} entry={entry} diagnosisNameFrom={diagnosisNameFrom} />;
