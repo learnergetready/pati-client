@@ -4,19 +4,19 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Gender, Patient } from "../types";
 import { Female, Male } from "@mui/icons-material";
-/// <reference types="vite-plugin-svgr/client" />
 import Other from "../../assets/other_gender_public_domain.svg?react";
+import { assertNever } from "../utils";
 
 const genderIcon = (gender: Gender) => {
   switch (gender) {
-    case "male":
+    case Gender.Male:
       return <Male />;
-    case "female":
+    case Gender.Female:
       return <Female />;
-    case "other":
+    case Gender.Other:
       return <Other />;
     default:
-      break; // couldn't get exhaustive type checking working here..
+      return assertNever(gender);
   }
 };
 
@@ -32,7 +32,7 @@ const ViewPatient = () => {
       };
       findPatient(patientId);
     }
-  }, []);
+  }, [patientId]);
   
   if(!patient) {
     return <Typography variant="body1">No patient with that id.</Typography>;
