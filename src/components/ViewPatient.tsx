@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import patientService from "../services/patients";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Gender, Patient } from "../types";
+import { Entry, Gender, Patient } from "../types";
 import { Female, Male } from "@mui/icons-material";
 import Other from "../../assets/other_gender_public_domain.svg?react";
 import { assertNever } from "../utils";
@@ -18,6 +18,24 @@ const genderIcon = (gender: Gender) => {
     default:
       return assertNever(gender);
   }
+};
+
+const Entries = ({entries}: {entries: Entry[]}) => {
+  return (
+    <Box>
+    <Typography variant="h6" marginY={3}>Entries</Typography>
+    {entries.map(entry => {
+      return (
+        <Box key={entry.id}>
+        <Typography variant="body1">{entry.date} <i>{entry.description}</i></Typography>
+        <ul>
+          {entry.diagnosisCodes && entry.diagnosisCodes.map(d => <li key={entry.id+d}>{d}</li>)}
+        </ul>
+        </Box>
+      );
+    })}
+    </Box>
+  );
 };
 
 const ViewPatient = () => {
@@ -42,6 +60,7 @@ const ViewPatient = () => {
     <Typography variant="h5" marginY={3}>{patient.name} {genderIcon(patient.gender)}</Typography>
     <Typography variant="body1">ssn: {patient.ssn}</Typography>
     <Typography variant="body1">occupation: {patient.occupation}</Typography>
+    {<Entries entries={patient.entries} />}
     </Box>
   );
 };
