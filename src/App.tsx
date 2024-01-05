@@ -1,33 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
-import { Diagnosis, Patient } from "./types";
 
 import ViewPatient from "./components/ViewPatient";
-import diagnosisService from "./services/diagnosis";
-import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
+import { useAppDispatch } from "./hooks";
+import { initializeDiagnoses } from "./reducers/diagnosis";
+import { initializePatients } from "./reducers/patient";
 
 const App = () => {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [diagnosisCodes, setDiagnosisCodes] = useState<Diagnosis[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
-
-    const fetchPatientList = async () => {
-      const patients = await patientService.getAll();
-      setPatients(patients);
-    };
-    const fetchDiagnosisCodes = async () => {
-      const allDiagnosesCodes = await diagnosisService.getAll();
-      setDiagnosisCodes(allDiagnosesCodes);
-    };
-    void fetchPatientList();
-    void fetchDiagnosisCodes();
+    dispatch(initializePatients());
+    dispatch(initializeDiagnoses());
   }, []);
   
   return (
@@ -42,8 +32,8 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Routes>
-            <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
-            <Route path="/patients/:patientId" element={<ViewPatient diagnosisCodes={diagnosisCodes} />} />
+            <Route path="/" element={<PatientListPage />} />
+            <Route path="/patients/:patientId" element={<ViewPatient />} />
           </Routes>
         </Container>
       </Router>

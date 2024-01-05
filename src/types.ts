@@ -1,3 +1,5 @@
+import { UnionOmit } from "./utils";
+
 export interface Diagnosis {
   code: string;
   name: string;
@@ -67,3 +69,5 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+export type NewEntry = UnionOmit<Entry, "id">;

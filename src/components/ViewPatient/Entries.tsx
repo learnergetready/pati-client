@@ -1,8 +1,10 @@
-import { Diagnosis, Entry, HealthCheckEntry, HealthCheckRating, HospitalEntry as HospitalEntryType, OccupationalHealthcareEntry } from "../../types";
+import { Diagnosis, Entry, NewEntry, HealthCheckEntry, HealthCheckRating, HospitalEntry as HospitalEntryType, OccupationalHealthcareEntry } from "../../types";
 import { Box, Typography } from "@mui/material";
 import { assertNever } from "../../utils";
 import { Favorite, HeartBroken, LocalHospital, MedicalServices, MonitorHeart, Work } from "@mui/icons-material";
 import { descendingByDate } from "../../utils";
+import EntryForm from "./EntryForm";
+import { useAppSelector } from "../../hooks";
 
 interface HealthCheckProps {
   entry: HealthCheckEntry;
@@ -84,7 +86,13 @@ const OccupationalEntry = ({entry, diagnosisNameFrom}: OccupationalProps) => {
   );
 };
 
-const Entries = ({entries, diagnosisCodes}: {entries: Entry[], diagnosisCodes: Diagnosis[]}) => {
+interface EntriesProps {
+  entries: Entry[];
+  addEntry: (patientId: string, newEntry: NewEntry) => Promise<void>;
+}
+
+const Entries = ({entries, addEntry}: EntriesProps) => {
+    const diagnosisCodes = useAppSelector(state => state.diagnoses);
 
     const diagnosisNameFrom = (code: Diagnosis["code"]) => {
       const theDiagnosis = diagnosisCodes.find(d => d.code === code);
@@ -96,7 +104,8 @@ const Entries = ({entries, diagnosisCodes}: {entries: Entry[], diagnosisCodes: D
 
     return (
       <Box>
-      <Typography variant="h5" marginY={3}>Entries</Typography>
+        <EntryForm addEntry={addEntry} />
+      <Typography variant="h5" marginTop={5} marginBottom={3}>Entries</Typography>
       {entries.sort(descendingByDate).map(entry => {
         switch (entry.type) {
           case "HealthCheck":

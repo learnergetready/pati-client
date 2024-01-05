@@ -1,21 +1,14 @@
 import { useState } from "react";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
-import axios from 'axios';
-
+import { isAxiosError } from 'axios';
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
-
 import HealthRatingBar from "../HealthRatingBar";
-
-import patientService from "../../services/patients";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { addPatient } from "../../reducers/patient";
 
-interface Props {
-  patients : Patient[]
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
-}
-
-const PatientListPage = ({ patients, setPatients } : Props ) => {
+const PatientListPage = () => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -27,13 +20,16 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
     setError(undefined);
   };
 
+  const dispatch = useAppDispatch();
+  
+  const patients = useAppSelector(state => state.patients);
+
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
-      const patient = await patientService.create(values);
-      setPatients(patients.concat(patient));
+      dispatch(addPatient(values));
       setModalOpen(false);
     } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
+      if (isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "string") {
           const message = e.response.data.replace('Something went wrong. Error: ', '');
           console.error(message);
