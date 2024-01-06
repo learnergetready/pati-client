@@ -21,3 +21,6 @@ export const descendingByDate = (a: Entry, b: Entry): number => {
 
 // Omit for type unions
 export type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+// keys of a type union
+export type KeysOfUnion<T> = T extends T ? keyof T : never;

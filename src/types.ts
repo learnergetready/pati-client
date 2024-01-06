@@ -1,4 +1,4 @@
-import { UnionOmit } from "./utils";
+import { KeysOfUnion, UnionOmit } from "./utils";
 
 export interface Diagnosis {
   code: string;
@@ -71,3 +71,5 @@ export type Entry =
   | HealthCheckEntry;
 
 export type NewEntry = UnionOmit<Entry, "id">;
+
+export type KeysOfNewEntry = KeysOfUnion<NewEntry>;
