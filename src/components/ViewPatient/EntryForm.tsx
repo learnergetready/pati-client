@@ -1,7 +1,7 @@
 import { Box, Button, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Discharge, NewEntry, SickLeave } from "../../types";
+import { Diagnosis, Discharge, NewEntry, SickLeave } from "../../types";
 import Field from "./Field";
 
 interface Props {
@@ -40,10 +40,10 @@ const EntryForm = ({addEntry}: Props ) => {
               date: target.date.value,
               description: target.description.value,
               specialist: target.specialist.value,
-              healthCheckRating: target.healthCheckRating.value
+              healthCheckRating: Number(target.healthCheckRating.value)
             };
             if (target.diagnosisCodes.value) {
-              healthCheckEntry.diagnosisCodes = target.diagnosisCodes.value.split(",").map(c => c.trim());
+              healthCheckEntry.diagnosisCodes = target.diagnosisCodes.value.split(",") as Array<Diagnosis['code']>;
             }
             if (!patientId) {
               throw new Error("Error. Patient id not found!");
@@ -62,7 +62,7 @@ const EntryForm = ({addEntry}: Props ) => {
               }
             };
             if (target.diagnosisCodes.value) {
-              hospitalEntry.diagnosisCodes = target.diagnosisCodes.value.split(",").map(c => c.trim());
+              hospitalEntry.diagnosisCodes = target.diagnosisCodes.value.split(",") as Array<Diagnosis['code']>;
             }
             if (!patientId) {
               throw new Error("Error. Patient id not found!");
@@ -78,7 +78,7 @@ const EntryForm = ({addEntry}: Props ) => {
               employerName: target.employerName.value,
             };
             if (target.diagnosisCodes.value) {
-              occupationalEntry.diagnosisCodes = target.diagnosisCodes.value.split(",").map(c => c.trim());
+              occupationalEntry.diagnosisCodes = target.diagnosisCodes.value.split(",") as Array<Diagnosis['code']>;
             }
             if (target.sickLeaveStartDate.value) {
               occupationalEntry.sickLeave = {

@@ -19,6 +19,14 @@ export const descendingByDate = (a: Entry, b: Entry): number => {
     }
 };
 
+export const ascendingAlphabetically = (a: string, b: string): number => {
+    if (a < b) {
+        return -1;
+    } else {
+        return 1;
+    }
+};
+
 // Omit for type unions
 export type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 

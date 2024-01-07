@@ -1,6 +1,6 @@
 import { Diagnosis, Entry, NewEntry, HealthCheckEntry, HealthCheckRating, HospitalEntry as HospitalEntryType, OccupationalHealthcareEntry } from "../../types";
 import { Box, Typography } from "@mui/material";
-import { assertNever } from "../../utils";
+import { ascendingAlphabetically, assertNever } from "../../utils";
 import { Favorite, HeartBroken, LocalHospital, MedicalServices, MonitorHeart, Work } from "@mui/icons-material";
 import { descendingByDate } from "../../utils";
 import EntryForm from "./EntryForm";
@@ -51,7 +51,7 @@ const HealthcheckEntry = ({entry, diagnosisNameFrom}: HealthCheckProps) => {
     <Typography variant="body1" marginTop={1}><i>{entry.description}</i></Typography>
     <HealthScoreIcon score={entry.healthCheckRating} />
     <ul>
-      {entry.diagnosisCodes && entry.diagnosisCodes.map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
+      {entry.diagnosisCodes && entry.diagnosisCodes.sort(ascendingAlphabetically).map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
     </ul>
     <Typography variant="body1">diagnosis by {entry.specialist}</Typography>
     </Box>
@@ -65,7 +65,7 @@ const HospitalEntry = ({entry, diagnosisNameFrom}: HospitalProps) => {
     <Typography variant="body1" marginTop={1}><b>Entry:</b> {entry.description}</Typography>
     <Typography variant="body1" marginTop={1}><b>Discharge:</b> {entry.discharge.criteria} ({entry.discharge.date})</Typography>
     <ul>
-      {entry.diagnosisCodes && entry.diagnosisCodes.map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
+      {entry.diagnosisCodes && entry.diagnosisCodes.sort(ascendingAlphabetically).map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
     </ul>
     <Typography variant="body1" marginTop={3}>diagnosis by {entry.specialist}</Typography>
     </Box>
@@ -78,7 +78,7 @@ const OccupationalEntry = ({entry, diagnosisNameFrom}: OccupationalProps) => {
     <Typography variant="body1"><strong>{entry.date}</strong> <Work /> {entry.employerName}</Typography>
     <Typography variant="body1" marginTop={1}><i>{entry.description}</i></Typography>
     <ul>
-      {entry.diagnosisCodes && entry.diagnosisCodes.map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
+      {entry.diagnosisCodes && entry.diagnosisCodes.sort(ascendingAlphabetically).map(c => <li key={entry.id+c}>{c} {diagnosisNameFrom(c)}</li>)}
     </ul>
     {entry.sickLeave && <Typography variant="body1" marginY={3}>Sick leave: {entry.sickLeave.startDate} to {entry.sickLeave.endDate}</Typography>}
     <Typography variant="body1">diagnosis by {entry.specialist}</Typography>
